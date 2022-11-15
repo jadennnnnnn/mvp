@@ -1,0 +1,62 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  /* background-color: #143F6B; */
+}
+
+datalist {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  writing-mode: vertical-lr;
+  width: 200px;
+}
+
+option {
+  padding: 0;
+}
+
+input[type='range'] {
+  appearance: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 1px solid #222;
+  width: 200px;
+}
+
+.App {
+}
+
+.waveform {
+
+}
+
+.keyboard {
+  display: flex;
+  overflow: auto;
+}
+
+.keys {
+  display: flex;
+}
+
+.key {
+  height: calc(var(--width) * 4);
+  width: var(--width);
+}
+
+.white {
+  --width: 75px;
+  background-color: white;
+  border: 1px solid #333;
+}
+
+.black {
+  --width: 45px;
+  background-color: black;
+  margin-left: calc(var(--width) / -2);
+  margin-right: calc(var(--width) / -2);
+  z-index: 2;
+  color: white;
+}

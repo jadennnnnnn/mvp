@@ -1,6 +1,9 @@
+import { useState, useEffect } from 'react';
+
 export default function Keys ({noteOn, noteOff}) {
 
-  const NOTES = {
+
+  const [NOTES] = useState({
     'A-0' : 27.50000,
     'A#0' : 29.13524,
     'B-0' : 30.86771,
@@ -89,7 +92,7 @@ export default function Keys ({noteOn, noteOff}) {
     'A#7' : 3729.310,
     'B-7' : 3951.066,
     'C-8' : 4186.009
-  }
+  })
 
   function handleEvent (e) {
     if (e.type === 'mousedown') {
@@ -100,106 +103,170 @@ export default function Keys ({noteOn, noteOff}) {
     }
   }
 
+  const [octave, setOctave] = useState(3);
+
+  useEffect(() => {
+    const onKeydown = (e) => {
+      const keyName = e.key;
+      if (!e.repeat) {
+        if (keyName === 'z') {noteOn(NOTES[`C-${octave}`])}
+        if (keyName === 's') {noteOn(NOTES[`C#${octave}`])}
+        if (keyName === 'x') {noteOn(NOTES[`D-${octave}`])}
+        if (keyName === 'd') {noteOn(NOTES[`D#${octave}`])}
+        if (keyName === 'c') {noteOn(NOTES[`E-${octave}`])}
+        if (keyName === 'v') {noteOn(NOTES[`F-${octave}`])}
+        if (keyName === 'g') {noteOn(NOTES[`F#${octave}`])}
+        if (keyName === 'b') {noteOn(NOTES[`G-${octave}`])}
+        if (keyName === 'h') {noteOn(NOTES[`G#${octave}`])}
+        if (keyName === 'n') {noteOn(NOTES[`A-${octave}`])}
+        if (keyName === 'j') {noteOn(NOTES[`A#${octave}`])}
+        if (keyName === 'm') {noteOn(NOTES[`B-${octave}`])}
+        if (keyName === ',') {noteOn(NOTES[`C-${octave+1}`])}
+        if (keyName === 'l') {noteOn(NOTES[`C#${octave+1}`])}
+        if (keyName === '.') {noteOn(NOTES[`D-${octave+1}`])}
+        if (keyName === ';') {noteOn(NOTES[`D#${octave+1}`])}
+        if (keyName === '/') {noteOn(NOTES[`E-${octave+1}`])}
+
+      }
+    }
+    const onKeyup = (e) => {
+      const keyName = e.key;
+      if (keyName === 'z') {noteOff(NOTES[`C-${octave}`])}
+      if (keyName === 's') {noteOff(NOTES[`C#${octave}`])}
+      if (keyName === 'x') {noteOff(NOTES[`D-${octave}`])}
+      if (keyName === 'd') {noteOff(NOTES[`D#${octave}`])}
+      if (keyName === 'c') {noteOff(NOTES[`E-${octave}`])}
+      if (keyName === 'v') {noteOff(NOTES[`F-${octave}`])}
+      if (keyName === 'g') {noteOff(NOTES[`F#${octave}`])}
+      if (keyName === 'b') {noteOff(NOTES[`G-${octave}`])}
+      if (keyName === 'h') {noteOff(NOTES[`G#${octave}`])}
+      if (keyName === 'n') {noteOff(NOTES[`A-${octave}`])}
+      if (keyName === 'j') {noteOff(NOTES[`A#${octave}`])}
+      if (keyName === 'm') {noteOff(NOTES[`B-${octave}`])}
+      if (keyName === ',') {noteOff(NOTES[`C-${octave+1}`])}
+      if (keyName === 'l') {noteOff(NOTES[`C#${octave+1}`])}
+      if (keyName === '.') {noteOff(NOTES[`D-${octave+1}`])}
+      if (keyName === ';') {noteOff(NOTES[`D#${octave+1}`])}
+      if (keyName === '/') {noteOff(NOTES[`E-${octave+1}`])}
+    }
+    window.addEventListener('keydown', onKeydown);
+    window.addEventListener('keyup', onKeyup);
+    return () => {
+      window.removeEventListener('keydown', onKeydown);
+      window.removeEventListener('keyup', onKeyup);
+
+    }
+  }, [octave, noteOn, noteOff, NOTES])
+
+
   return (
-    <div className='keys'>
+    <div>
 
-      <button className='key white' data-note='A-0' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-0</button>
-      <button className='key black' data-note='A#0' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#0</button>
-      <button className='key white' data-note='B-0' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-0</button>
+      <button onClick={()=>{if (octave > 1) {setOctave(octave - 1)}}}>-</button>
+      <button onClick={()=>{if (octave < 7) {setOctave(octave + 1)}}}>+</button>
 
-      <button className='key white' data-note='C-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-1</button>
-      <button className='key black' data-note='C#1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#1</button>
-      <button className='key white' data-note='D-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-1</button>
-      <button className='key black' data-note='D#1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#1</button>
-      <button className='key white' data-note='E-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-1</button>
-      <button className='key white' data-note='F-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-1</button>
-      <button className='key black' data-note='F#1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#1</button>
-      <button className='key white' data-note='G-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-1</button>
-      <button className='key black' data-note='G#1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#1</button>
-      <button className='key white' data-note='A-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-1</button>
-      <button className='key black' data-note='A#1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#1</button>
-      <button className='key white' data-note='B-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-1</button>
+      <div className='keyboard'>
+        <div className='keys'>
 
-      <button className='key white' data-note='C-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-2</button>
-      <button className='key black' data-note='C#2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#2</button>
-      <button className='key white' data-note='D-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-2</button>
-      <button className='key black' data-note='D#2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#2</button>
-      <button className='key white' data-note='E-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-2</button>
-      <button className='key white' data-note='F-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-2</button>
-      <button className='key black' data-note='F#2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#2</button>
-      <button className='key white' data-note='G-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-2</button>
-      <button className='key black' data-note='G#2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#2</button>
-      <button className='key white' data-note='A-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-2</button>
-      <button className='key black' data-note='A#2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#2</button>
-      <button className='key white' data-note='B-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-2</button>
+          <button className='key white' data-note='A-0' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-0</button>
+          <button className='key black' data-note='A#0' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#0</button>
+          <button className='key white' data-note='B-0' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-0</button>
 
-      <button className='key white' data-note='C-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-3</button>
-      <button className='key black' data-note='C#3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#3</button>
-      <button className='key white' data-note='D-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-3</button>
-      <button className='key black' data-note='D#3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#3</button>
-      <button className='key white' data-note='E-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-3</button>
-      <button className='key white' data-note='F-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-3</button>
-      <button className='key black' data-note='F#3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#3</button>
-      <button className='key white' data-note='G-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-3</button>
-      <button className='key black' data-note='G#3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#3</button>
-      <button className='key white' data-note='A-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-3</button>
-      <button className='key black' data-note='A#3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#3</button>
-      <button className='key white' data-note='B-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-3</button>
+          <button className='key white' data-note='C-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-1</button>
+          <button className='key black' data-note='C#1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#1</button>
+          <button className='key white' data-note='D-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-1</button>
+          <button className='key black' data-note='D#1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#1</button>
+          <button className='key white' data-note='E-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-1</button>
+          <button className='key white' data-note='F-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-1</button>
+          <button className='key black' data-note='F#1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#1</button>
+          <button className='key white' data-note='G-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-1</button>
+          <button className='key black' data-note='G#1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#1</button>
+          <button className='key white' data-note='A-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-1</button>
+          <button className='key black' data-note='A#1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#1</button>
+          <button className='key white' data-note='B-1' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-1</button>
 
-      <button className='key white' data-note='C-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-4</button>
-      <button className='key black' data-note='C#4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#4</button>
-      <button className='key white' data-note='D-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-4</button>
-      <button className='key black' data-note='D#4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#4</button>
-      <button className='key white' data-note='E-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-4</button>
-      <button className='key white' data-note='F-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-4</button>
-      <button className='key black' data-note='F#4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#4</button>
-      <button className='key white' data-note='G-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-4</button>
-      <button className='key black' data-note='G#4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#4</button>
-      <button className='key white' data-note='A-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-4</button>
-      <button className='key black' data-note='A#4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#4</button>
-      <button className='key white' data-note='B-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-4</button>
+          <button className='key white' data-note='C-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-2</button>
+          <button className='key black' data-note='C#2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#2</button>
+          <button className='key white' data-note='D-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-2</button>
+          <button className='key black' data-note='D#2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#2</button>
+          <button className='key white' data-note='E-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-2</button>
+          <button className='key white' data-note='F-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-2</button>
+          <button className='key black' data-note='F#2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#2</button>
+          <button className='key white' data-note='G-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-2</button>
+          <button className='key black' data-note='G#2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#2</button>
+          <button className='key white' data-note='A-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-2</button>
+          <button className='key black' data-note='A#2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#2</button>
+          <button className='key white' data-note='B-2' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-2</button>
 
-      <button className='key white' data-note='C-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-5</button>
-      <button className='key black' data-note='C#5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#5</button>
-      <button className='key white' data-note='D-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-5</button>
-      <button className='key black' data-note='D#5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#5</button>
-      <button className='key white' data-note='E-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-5</button>
-      <button className='key white' data-note='F-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-5</button>
-      <button className='key black' data-note='F#5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#5</button>
-      <button className='key white' data-note='G-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-5</button>
-      <button className='key black' data-note='G#5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#5</button>
-      <button className='key white' data-note='A-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-5</button>
-      <button className='key black' data-note='A#5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#5</button>
-      <button className='key white' data-note='B-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-5</button>
+          <button className='key white' data-note='C-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-3</button>
+          <button className='key black' data-note='C#3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#3</button>
+          <button className='key white' data-note='D-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-3</button>
+          <button className='key black' data-note='D#3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#3</button>
+          <button className='key white' data-note='E-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-3</button>
+          <button className='key white' data-note='F-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-3</button>
+          <button className='key black' data-note='F#3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#3</button>
+          <button className='key white' data-note='G-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-3</button>
+          <button className='key black' data-note='G#3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#3</button>
+          <button className='key white' data-note='A-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-3</button>
+          <button className='key black' data-note='A#3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#3</button>
+          <button className='key white' data-note='B-3' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-3</button>
 
-      <button className='key white' data-note='C-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-6</button>
-      <button className='key black' data-note='C#6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#6</button>
-      <button className='key white' data-note='D-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-6</button>
-      <button className='key black' data-note='D#6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#6</button>
-      <button className='key white' data-note='E-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-6</button>
-      <button className='key white' data-note='F-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-6</button>
-      <button className='key black' data-note='F#6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#6</button>
-      <button className='key white' data-note='G-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-6</button>
-      <button className='key black' data-note='G#6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#6</button>
-      <button className='key white' data-note='A-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-6</button>
-      <button className='key black' data-note='A#6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#6</button>
-      <button className='key white' data-note='B-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-6</button>
+          <button className='key white' data-note='C-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-4</button>
+          <button className='key black' data-note='C#4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#4</button>
+          <button className='key white' data-note='D-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-4</button>
+          <button className='key black' data-note='D#4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#4</button>
+          <button className='key white' data-note='E-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-4</button>
+          <button className='key white' data-note='F-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-4</button>
+          <button className='key black' data-note='F#4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#4</button>
+          <button className='key white' data-note='G-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-4</button>
+          <button className='key black' data-note='G#4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#4</button>
+          <button className='key white' data-note='A-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-4</button>
+          <button className='key black' data-note='A#4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#4</button>
+          <button className='key white' data-note='B-4' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-4</button>
 
-      <button className='key white' data-note='C-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-7</button>
-      <button className='key black' data-note='C#7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#7</button>
-      <button className='key white' data-note='D-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-7</button>
-      <button className='key black' data-note='D#7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#7</button>
-      <button className='key white' data-note='E-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-7</button>
-      <button className='key white' data-note='F-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-7</button>
-      <button className='key black' data-note='F#7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#7</button>
-      <button className='key white' data-note='G-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-7</button>
-      <button className='key black' data-note='G#7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#7</button>
-      <button className='key white' data-note='A-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-7</button>
-      <button className='key black' data-note='A#7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#7</button>
-      <button className='key white' data-note='B-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-7</button>
+          <button className='key white' data-note='C-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-5</button>
+          <button className='key black' data-note='C#5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#5</button>
+          <button className='key white' data-note='D-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-5</button>
+          <button className='key black' data-note='D#5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#5</button>
+          <button className='key white' data-note='E-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-5</button>
+          <button className='key white' data-note='F-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-5</button>
+          <button className='key black' data-note='F#5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#5</button>
+          <button className='key white' data-note='G-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-5</button>
+          <button className='key black' data-note='G#5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#5</button>
+          <button className='key white' data-note='A-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-5</button>
+          <button className='key black' data-note='A#5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#5</button>
+          <button className='key white' data-note='B-5' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-5</button>
 
-      <button className='key white' data-note='C-8' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-8</button>
+          <button className='key white' data-note='C-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-6</button>
+          <button className='key black' data-note='C#6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#6</button>
+          <button className='key white' data-note='D-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-6</button>
+          <button className='key black' data-note='D#6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#6</button>
+          <button className='key white' data-note='E-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-6</button>
+          <button className='key white' data-note='F-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-6</button>
+          <button className='key black' data-note='F#6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#6</button>
+          <button className='key white' data-note='G-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-6</button>
+          <button className='key black' data-note='G#6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#6</button>
+          <button className='key white' data-note='A-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-6</button>
+          <button className='key black' data-note='A#6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#6</button>
+          <button className='key white' data-note='B-6' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-6</button>
 
+          <button className='key white' data-note='C-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-7</button>
+          <button className='key black' data-note='C#7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C#7</button>
+          <button className='key white' data-note='D-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D-7</button>
+          <button className='key black' data-note='D#7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>D#7</button>
+          <button className='key white' data-note='E-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>E-7</button>
+          <button className='key white' data-note='F-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F-7</button>
+          <button className='key black' data-note='F#7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>F#7</button>
+          <button className='key white' data-note='G-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G-7</button>
+          <button className='key black' data-note='G#7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>G#7</button>
+          <button className='key white' data-note='A-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A-7</button>
+          <button className='key black' data-note='A#7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>A#7</button>
+          <button className='key white' data-note='B-7' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>B-7</button>
+
+          <button className='key white' data-note='C-8' onMouseDown={(e)=>{handleEvent(e)}} onMouseUp={(e)=>{handleEvent(e)}} onMouseLeave={(e)=>{handleEvent(e)}}>C-8</button>
+
+        </div>
+      </div>
     </div>
   )
 }

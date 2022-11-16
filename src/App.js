@@ -106,9 +106,9 @@ function App() {
       const relEndTime = now + relDuration;
       activeNotes[freq].gainNode.gain.setValueAtTime(activeNotes[freq].gainNode.gain.value, now);
       activeNotes[freq].gainNode.gain.linearRampToValueAtTime(0, relEndTime);
+      setTimeout(()=>{activeNotes[freq].oscBank.forEach((osc)=>{osc.stop()})}, relDuration * 1000)
     }
   }
-
 
   return (
     <div className="App">
@@ -118,9 +118,7 @@ function App() {
       <Detune setDetune={setDetune}/>
       <Echo echo={echo} />
       <ADSR adsr={adsr} setAdsr={setAdsr}/>
-      <div className='keyboard'>
-        <Keys noteOn={noteOn} noteOff={noteOff} createOscillators={createOscillators}/>
-      </div>
+      <Keys noteOn={noteOn} noteOff={noteOff} createOscillators={createOscillators}/>
     </div>
   );
 }

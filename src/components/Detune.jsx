@@ -12,7 +12,7 @@ export default function Detune ({setDetune}) {
   }, [value, setDetune])
 
   return (
-    <div className='detune'>
+    <div className='detune box'>
       <label>detune</label><br/>
       <input type='range' min='0' max='11' step='1' value={value} onChange={(e)=>{setValue(Number(e.target.value))}} />
     </div>

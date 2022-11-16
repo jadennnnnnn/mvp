@@ -19,10 +19,10 @@ export default function LowpassFilter ({actx, lowpassFilter}) {
   }, [q, lowpassFilter])
 
   return (
-    <div className='lowpass-filter'>
-      <label>frequency</label>
+    <div className='lowpass-filter box'>
+      <label>frequency</label><br/>
       <input id='lowpass-freq' type='range' min='0' max='1' step='0.01' value={freq} onChange={(e)=>{setFreq(Number(e.target.value))}} /><br/>
-      <label>Q</label>
+      <label>q</label><br/>
       <input id='lowpass-q' type='range' min='0.01' max='1' step='0.01' value={q} onChange={(e)=>{setQ(Number(e.target.value))}} />
     </div>
   )

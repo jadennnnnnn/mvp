@@ -9,8 +9,8 @@ export default function MasterVolume ({masterVolume}) {
   }, [value, masterVolume.gain])
 
   return (
-    <div className='master-volume'>
-      <label>Master Volume</label><br/>
+    <div className='volume box'>
+      <label>volume</label><br/>
       <input type='range' min='0' max='.1' step='.01' value={value} onChange={(e)=>{setValue(Number(e.target.value))}} />
     </div>
   )

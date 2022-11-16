@@ -27,17 +27,17 @@ export default function ADSR ({adsr}) {
   }, [adsr, releaseValue])
 
   return (
-    <div className='ADSR'>
-      <label>attack:</label>
+    <div className='adsr box'>
+      <label>attack:</label><br/>
       <input type='range' min='0' max='1' step='0.01' value={attackValue} onChange={(e)=>{setAttackValue(Number(e.target.value))}} /><br/>
 
-      <label>decay:</label>
+      <label>decay:</label><br/>
       <input type='range' min='0' max='1' step='0.1' value={decayValue} onChange={(e)=>{setDecayValue(Number(e.target.value))}} /><br/>
 
-      <label>sustain:</label>
+      <label>sustain:</label><br/>
       <input type='range' min='0' max='1' step='0.1' value={sustainValue} onChange={(e)=>{setSustainValue(Number(e.target.value))}} /><br/>
 
-      <label>release:</label>
+      <label>release:</label><br/>
       <input type='range' min='0' max='1' step='0.1' value={releaseValue} onChange={(e)=>{setReleaseValue(Number(e.target.value))}} />
 
     </div>

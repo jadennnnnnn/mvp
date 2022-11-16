@@ -17,10 +17,10 @@ export default function Echo ({echo}) {
   }, [feedbackValue, echo])
 
   return (
-    <div className='echo'>
-      <label>time</label>
+    <div className='echo box'>
+      <label>time</label><br/>
       <input type='range' min='0' max='0.5' step='0.01' value={timeValue} onChange={(e)=>{setTimeValue(Number(e.target.value))}} /><br/>
-      <label>feedback</label>
+      <label>feedback</label><br/>
       <input type='range' min='0' max='0.8' step='0.01' value={feedbackValue} onChange={(e)=>{setFeedbackValue(Number(e.target.value))}} />
     </div>
   )

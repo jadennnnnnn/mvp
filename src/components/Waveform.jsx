@@ -21,17 +21,17 @@ export default function Waveform ({setWaveform}) {
 
 
   return (
-    <div className='waveform'>
-      <label>waveform</label><br/>
-      <input type='range' min='0' max='3' step='1' list='waveform-list' value={value} onChange={(e)=>{setValue(Number(e.target.value))}} />
-
-      <datalist id='waveform-list'>
-        <option value="0" label='sine'></option>
-        <option value="1" label='square'></option>
-        <option value="2" label='sawtooth'></option>
-        <option value="3" label='triangle'></option>
-      </datalist>
-
+    <div className='waveform box'>
+      <label>waveform</label>
+      <div>
+        <input type='range' min='0' max='3' step='1' value={value} onChange={(e)=>{setValue(Number(e.target.value))}} />
+        <div className='waveform-list'>
+          <span>sin</span>
+          <span>squ</span>
+          <span>saw</span>
+          <span>tri</span>
+        </div>
+      </div>
     </div>
   )
 }

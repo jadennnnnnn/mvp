@@ -9,7 +9,7 @@ import MasterVolume from './components/MasterVolume.jsx';
 import Echo from './components/Echo.jsx';
 import { PresetProvider } from './Preset.jsx'
 
-function App() {
+export default function App() {
   const [actx] = useState(()=>(new AudioContext()));
   const [masterVolume] = useState(() => {
     const masterVolume = new GainNode(actx);
@@ -113,16 +113,14 @@ function App() {
   return (
     <div className="App">
       <PresetProvider>
-        <LowpassFilter actx={actx} lowpassFilter={lowpassFilter}/>
         <MasterVolume masterVolume={masterVolume}/>
         <Waveform setWaveform={setWaveform}/>
         <Detune setDetune={setDetune}/>
-        <Echo echo={echo} />
+        <LowpassFilter actx={actx} lowpassFilter={lowpassFilter}/>
         <ADSR adsr={adsr} />
+        <Echo echo={echo} />
         <Keys noteOn={noteOn} noteOff={noteOff} createOscillators={createOscillators}/>
       </PresetProvider>
     </div>
   );
 }
-
-export default App;

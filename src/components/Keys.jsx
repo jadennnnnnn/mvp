@@ -103,7 +103,7 @@ export default function Keys ({noteOn, noteOff}) {
     }
   }
 
-  const [octave, setOctave] = useState(3);
+  const [octave, setOctave] = useState(5);
 
   useEffect(() => {
     const onKeydown = (e) => {

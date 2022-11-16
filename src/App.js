@@ -12,20 +12,19 @@ function App() {
   const [actx] = useState(()=>(new AudioContext()));
   const [masterVolume] = useState(() => {
     const masterVolume = new GainNode(actx);
-    masterVolume.gain.value = 0.3;
     masterVolume.connect(actx.destination)
     return masterVolume;
   })
-  const [waveform, setWaveform] = useState('triangle');
+  const [waveform, setWaveform] = useState('sine');
   const [detune, setDetune] = useState(0);
   const [lowpassFilter] = useState({frequency: 350, Q: 1})
 
-  const [adsr, setAdsr] = useState({attack: 0, decay:0, sustain: 1, release: 0});
+  const [adsr] = useState({attack: 0, decay:0, sustain: 1, release: 0});
   const STAGE_MAX_TIME = 2; //seconds
 
   const echo = {
-    time: 0.2,
-    feedback: 0.2,
+    time: 0,
+    feedback: 0,
     maxDuration: 2 // seconds
   }
 
@@ -117,7 +116,7 @@ function App() {
       <Waveform setWaveform={setWaveform}/>
       <Detune setDetune={setDetune}/>
       <Echo echo={echo} />
-      <ADSR adsr={adsr} setAdsr={setAdsr}/>
+      <ADSR adsr={adsr} />
       <Keys noteOn={noteOn} noteOff={noteOff} createOscillators={createOscillators}/>
     </div>
   );

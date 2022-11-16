@@ -11,16 +11,12 @@ function App() {
   const [actx] = useState(()=>(new AudioContext()));
   const [masterVolume] = useState(() => {
     const masterVolume = new GainNode(actx);
-    masterVolume.gain.value = 1;
+    masterVolume.gain.value = 0.5;
     masterVolume.connect(actx.destination)
     return masterVolume;
   })
-  const [lowpassFilter, setLowpassFilter] = useState(() => {
-    const filter = actx.createBiquadFilter()
-    filter.type = 'lowpass';
-    filter.connect(masterVolume)
-    return filter;
-  })
+  const [lowpassFilter] = useState({frequency: 350, Q: 1})
+
   const [detune, setDetune] = useState(0);
   const [waveform, setWaveform] = useState('triangle');
   const STAGE_MAX_TIME = 2; //seconds
@@ -42,7 +38,21 @@ function App() {
 
     const gainNode = new GainNode(actx)
     gainNode.gain.cancelScheduledValues(now);
-    gainNode.connect(lowpassFilter)
+    gainNode.connect(masterVolume)
+
+    const filter = actx.createBiquadFilter()
+    filter.type = 'lowpass';
+    filter.frequency.value = lowpassFilter.frequency;
+    filter.Q.value = lowpassFilter.Q;
+    filter.connect(gainNode)
+
+    document.querySelector('#lowpass-freq').addEventListener('input', (e) => {
+      const maxFilterFreq = actx.sampleRate / 2;
+      filter.frequency.value = Number(e.target.value) * maxFilterFreq;
+    });
+    document.querySelector('#lowpass-q').addEventListener('input', (e) => {
+      filter.Q.value = Number(e.target.value) * 30;
+    });
 
     let oscBank;
     if (detune) {
@@ -55,7 +65,7 @@ function App() {
     }
 
     oscBank.forEach((osc)=>{
-      osc.connect(gainNode)
+      osc.connect(filter)
       //ATTACK -> DECAY -> SUSTAIN
       const atkDuration = adsr.attack * STAGE_MAX_TIME;
       const atkEndTime = now + atkDuration;
@@ -83,7 +93,7 @@ function App() {
 
   return (
     <div className="App">
-      <LowpassFilter actx={actx} setLowpassFilter={setLowpassFilter} masterVolume={masterVolume}/>
+      <LowpassFilter actx={actx} lowpassFilter={lowpassFilter}/>
       <MasterVolume masterVolume={masterVolume}/>
       <Waveform setWaveform={setWaveform}/>
       <Detune setDetune={setDetune}/>

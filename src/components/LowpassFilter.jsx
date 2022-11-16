@@ -1,35 +1,21 @@
-import { useState } from 'react';
+export default function LowpassFilter ({actx, lowpassFilter}) {
 
-export default function LowpassFilter ({actx, masterVolume, setLowpassFilter}) {
-
-  const [values] = useState({frequency: 1, Q: 1})
-
-  // useEffect(()=>{
-    // }, [filterValues])
-
-
+  const maxFilterFreq = actx.sampleRate / 2;
   const handleEvent = (e, sliderType) => {
     if (sliderType === 'frequency') {
-      values.frequency = e.target.value
+      lowpassFilter.frequency = Number(e.target.value) * maxFilterFreq;
     }
     if (sliderType === 'Q') {
-      values.Q = e.target.value
+      lowpassFilter.Q = Number(e.target.value) * 30;
     }
-    const maxFilterFreq = actx.sampleRate / 2;
-    const filter = actx.createBiquadFilter()
-    filter.type = 'lowpass';
-    filter.frequency.value = values.frequency * maxFilterFreq;
-    filter.Q.value = values.Q * 30;
-    filter.connect(masterVolume)
-    setLowpassFilter(filter)
   }
 
   return (
-    <div className='losspass-filter'>
+    <div className='lowpass-filter'>
       <label>frequency</label>
-      <input type='range' min='0' max='1' step='0.01' onChange={(e)=>{handleEvent(e, 'frequency')}} /><br/>
+      <input id='lowpass-freq' type='range' min='0' max='1' step='0.01' onChange={(e)=>{handleEvent(e, 'frequency')}} /><br/>
       <label>Q</label>
-      <input type='range' min='0.1' max='1' step='0.01' onChange={(e)=>{handleEvent(e, 'Q')}} />
+      <input id='lowpass-q' type='range' min='0.1' max='1' step='0.01' onChange={(e)=>{handleEvent(e, 'Q')}} />
     </div>
   )
 }

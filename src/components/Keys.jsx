@@ -91,18 +91,12 @@ export default function Keys ({noteOn, noteOff}) {
     'C-8' : 4186.009
   }
 
-  const activeNotes = {}
-
   function handleEvent (e) {
     if (e.type === 'mousedown') {
-      activeNotes[e.target.dataset.note] = noteOn(NOTES[e.target.dataset.note]);
-      console.log('click')
+      noteOn(NOTES[e.target.dataset.note]);
     }
     if (e.type === 'mouseup' || e.type === 'mouseleave') {
-      if (activeNotes[e.target.dataset.note]) {
-        noteOff(activeNotes[e.target.dataset.note]);
-        delete activeNotes[e.target.dataset.note];
-      }
+      noteOff(NOTES[e.target.dataset.note]);
     }
   }
 

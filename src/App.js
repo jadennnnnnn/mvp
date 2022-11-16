@@ -6,21 +6,28 @@ import Waveform from './components/Waveform.jsx';
 import ADSR from './components/ADSR.jsx';
 import LowpassFilter from './components/LowpassFilter.jsx';
 import MasterVolume from './components/MasterVolume.jsx';
+import Echo from './components/Echo.jsx';
 
 function App() {
   const [actx] = useState(()=>(new AudioContext()));
   const [masterVolume] = useState(() => {
     const masterVolume = new GainNode(actx);
-    masterVolume.gain.value = 0.5;
+    masterVolume.gain.value = 0.3;
     masterVolume.connect(actx.destination)
     return masterVolume;
   })
+  const [waveform, setWaveform] = useState('triangle');
+  const [detune, setDetune] = useState(0);
   const [lowpassFilter] = useState({frequency: 350, Q: 1})
 
-  const [detune, setDetune] = useState(0);
-  const [waveform, setWaveform] = useState('triangle');
-  const STAGE_MAX_TIME = 2; //seconds
   const [adsr, setAdsr] = useState({attack: 0, decay:0, sustain: 1, release: 0});
+  const STAGE_MAX_TIME = 2; //seconds
+
+  const echo = {
+    time: 0.2,
+    feedback: 0.2,
+    maxDuration: 2 // seconds
+  }
 
   const createOscillators = (freq, detune) => {
     const osc = actx.createOscillator();
@@ -32,7 +39,6 @@ function App() {
   }
 
   const [activeNotes] = useState({})
-
   const noteOn = (freq) => {
     const now = actx.currentTime;
 
@@ -64,6 +70,14 @@ function App() {
       oscBank = [createOscillators(freq, 0)];
     }
 
+    const delayNode = actx.createDelay();
+    delayNode.delayTime.value = echo.time * echo.maxDuration;
+    delayNode.connect(masterVolume)
+
+    const delayGain = actx.createGain();
+    delayGain.gain.value = echo.feedback;
+
+
     oscBank.forEach((osc)=>{
       osc.connect(filter)
       //ATTACK -> DECAY -> SUSTAIN
@@ -75,6 +89,11 @@ function App() {
       gainNode.gain.linearRampToValueAtTime(1, atkEndTime);
       gainNode.gain.setTargetAtTime(adsr.sustain, atkEndTime, decayDuration);
     })
+
+    gainNode.connect(delayNode);
+    delayNode.connect(delayGain);
+    delayGain.connect(delayNode);
+
     activeNotes[freq] = {oscBank: oscBank, gainNode: gainNode};
   }
   const noteOff = (freq) => {
@@ -97,6 +116,7 @@ function App() {
       <MasterVolume masterVolume={masterVolume}/>
       <Waveform setWaveform={setWaveform}/>
       <Detune setDetune={setDetune}/>
+      <Echo echo={echo} />
       <ADSR adsr={adsr} setAdsr={setAdsr}/>
       <div className='keyboard'>
         <Keys noteOn={noteOn} noteOff={noteOff} createOscillators={createOscillators}/>

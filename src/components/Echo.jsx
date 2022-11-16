@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react';
+import { usePreset } from '../Preset';
 
 export default function Echo ({echo}) {
 
-  const [timeValue, setTimeValue] = useState(0)
-  const [feedbackValue, setFeedbackValue] = useState(0)
+  const preset = usePreset();
+
+  const [timeValue, setTimeValue] = useState(preset.time)
+  const [feedbackValue, setFeedbackValue] = useState(preset.feedback)
 
   useEffect(() => {
     echo.time = timeValue

@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
+import { usePreset } from '../Preset';
 
 export default function ADSR ({adsr}) {
 
-  const [attackValue, setAttackValue] = useState(0)
-  const [decayValue, setDecayValue] = useState(0)
-  const [sustainValue, setSustainValue] = useState(1)
-  const [releaseValue, setReleaseValue] = useState(0)
+  const preset = usePreset();
+
+  const [attackValue, setAttackValue] = useState(preset.attack)
+  const [decayValue, setDecayValue] = useState(preset.decay)
+  const [sustainValue, setSustainValue] = useState(preset.sustain)
+  const [releaseValue, setReleaseValue] = useState(preset.release)
 
   useEffect(() => {
     adsr.attack = attackValue

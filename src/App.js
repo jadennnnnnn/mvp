@@ -7,6 +7,7 @@ import ADSR from './components/ADSR.jsx';
 import LowpassFilter from './components/LowpassFilter.jsx';
 import MasterVolume from './components/MasterVolume.jsx';
 import Echo from './components/Echo.jsx';
+import { PresetProvider } from './Preset.jsx'
 
 function App() {
   const [actx] = useState(()=>(new AudioContext()));
@@ -111,13 +112,15 @@ function App() {
 
   return (
     <div className="App">
-      <LowpassFilter actx={actx} lowpassFilter={lowpassFilter}/>
-      <MasterVolume masterVolume={masterVolume}/>
-      <Waveform setWaveform={setWaveform}/>
-      <Detune setDetune={setDetune}/>
-      <Echo echo={echo} />
-      <ADSR adsr={adsr} />
-      <Keys noteOn={noteOn} noteOff={noteOff} createOscillators={createOscillators}/>
+      <PresetProvider>
+        <LowpassFilter actx={actx} lowpassFilter={lowpassFilter}/>
+        <MasterVolume masterVolume={masterVolume}/>
+        <Waveform setWaveform={setWaveform}/>
+        <Detune setDetune={setDetune}/>
+        <Echo echo={echo} />
+        <ADSR adsr={adsr} />
+        <Keys noteOn={noteOn} noteOff={noteOff} createOscillators={createOscillators}/>
+      </PresetProvider>
     </div>
   );
 }

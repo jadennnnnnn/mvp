@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { usePreset } from '../Preset';
 
 export default function Waveform ({setWaveform}) {
 
-  const [value, setValue] = useState(0)
+  const preset = usePreset();
+
+  const [value, setValue] = useState(preset.waveform)
 
   const [waveforms] = useState([
     'sine',

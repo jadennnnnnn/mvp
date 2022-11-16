@@ -3,9 +3,10 @@ import { usePreset } from '../Preset';
 
 export default function Waveform ({setWaveform}) {
 
-  const preset = usePreset();
+  const setting = usePreset().currentSetting;
+  const setCurrentSetting = usePreset().setCurrentSetting;
 
-  const [value, setValue] = useState(preset.waveform)
+  const [value, setValue] = useState(setting.waveform)
 
   const [waveforms] = useState([
     'sine',
@@ -15,14 +16,22 @@ export default function Waveform ({setWaveform}) {
   ])
 
   useEffect(() => {
+    setValue(setting.waveform)
+  }, [setting])
+
+  useEffect(() => {
     setWaveform(waveforms[value])
   }, [value, waveforms, setWaveform])
+
+  useEffect(() => {
+    setCurrentSetting({...setting, waveform: value})
+  }, [value])
 
 
 
   return (
-    <div className='waveform box'>
-      <label>waveform</label>
+    <fieldset className='box waveform-box'>
+      <legend>WAVEFORM</legend>
       <div>
         <input type='range' min='0' max='3' step='1' value={value} onChange={(e)=>{setValue(Number(e.target.value))}} />
         <div className='waveform-list'>
@@ -32,6 +41,6 @@ export default function Waveform ({setWaveform}) {
           <span>tri</span>
         </div>
       </div>
-    </div>
+    </fieldset>
   )
 }

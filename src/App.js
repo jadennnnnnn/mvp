@@ -7,7 +7,7 @@ import ADSR from './components/ADSR.jsx';
 import LowpassFilter from './components/LowpassFilter.jsx';
 import MasterVolume from './components/MasterVolume.jsx';
 import Echo from './components/Echo.jsx';
-import { PresetProvider } from './Preset.jsx'
+import { PresetProvider } from './Preset.jsx';
 
 export default function App() {
   const [actx] = useState(()=>(new AudioContext()));
@@ -39,7 +39,7 @@ export default function App() {
   }
 
   const [activeNotes] = useState({})
-  const noteOn = (freq) => {
+  const noteOn = (freq, key) => {
     const now = actx.currentTime;
 
     const gainNode = new GainNode(actx)
@@ -94,33 +94,44 @@ export default function App() {
     delayNode.connect(delayGain);
     delayGain.connect(delayNode);
 
-    activeNotes[freq] = {oscBank: oscBank, gainNode: gainNode};
+    if (activeNotes[key]) {
+      activeNotes[key].oscBank.forEach((osc)=>{osc.stop()})
+    }
+    activeNotes[key] = {oscBank: oscBank, gainNode: gainNode};
   }
-  const noteOff = (freq) => {
-    if (activeNotes[freq]) {
+  const noteOff = (key) => {
+    if (activeNotes[key]) {
       const now = actx.currentTime;
-      activeNotes[freq].gainNode.gain.cancelScheduledValues(now);
+      activeNotes[key].gainNode.gain.cancelScheduledValues(now);
 
       //SUSTAIN -> RELEASE
       const relDuration = adsr.release * STAGE_MAX_TIME;
       const relEndTime = now + relDuration;
-      activeNotes[freq].gainNode.gain.setValueAtTime(activeNotes[freq].gainNode.gain.value, now);
-      activeNotes[freq].gainNode.gain.linearRampToValueAtTime(0, relEndTime);
-      setTimeout(()=>{activeNotes[freq].oscBank.forEach((osc)=>{osc.stop()})}, relDuration * 1000)
+      activeNotes[key].gainNode.gain.setValueAtTime(activeNotes[key].gainNode.gain.value, now);
+      activeNotes[key].gainNode.gain.linearRampToValueAtTime(0, relEndTime);
+      setTimeout(()=>{activeNotes[key].oscBank.forEach((osc)=>{osc.stop()})}, relDuration * 1000)
     }
   }
 
   return (
-    <div className="App">
-      <PresetProvider>
-        <MasterVolume masterVolume={masterVolume}/>
-        <Waveform setWaveform={setWaveform}/>
-        <Detune setDetune={setDetune}/>
-        <LowpassFilter actx={actx} lowpassFilter={lowpassFilter}/>
-        <ADSR adsr={adsr} />
-        <Echo echo={echo} />
-        <Keys noteOn={noteOn} noteOff={noteOff} createOscillators={createOscillators}/>
-      </PresetProvider>
+  <div className="App">
+        <div className='vertical-slider'>
+          <MasterVolume masterVolume={masterVolume}/>
+        </div>
+        <PresetProvider>
+          <div className='col-1-3'>
+            <Waveform setWaveform={setWaveform}/>
+            <ADSR adsr={adsr} />
+          </div>
+          <div className='col-1-3'>
+            <Detune setDetune={setDetune}/>
+            <LowpassFilter actx={actx} lowpassFilter={lowpassFilter}/>
+            <Echo echo={echo} />
+          </div>
+        </PresetProvider>
+        <div className='bottom-col'>
+          <Keys noteOn={noteOn} noteOff={noteOff} createOscillators={createOscillators}/>
+        </div>
     </div>
   );
 }

@@ -3,10 +3,17 @@ import { usePreset } from '../Preset';
 
 export default function Echo ({echo}) {
 
-  const preset = usePreset();
+  const setting = usePreset().currentSetting;
+  const setCurrentSetting = usePreset().setCurrentSetting;
 
-  const [timeValue, setTimeValue] = useState(preset.time)
-  const [feedbackValue, setFeedbackValue] = useState(preset.feedback)
+
+  const [timeValue, setTimeValue] = useState(setting.time)
+  const [feedbackValue, setFeedbackValue] = useState(setting.feedback)
+
+  useEffect(() => {
+    setTimeValue(setting.time)
+    setFeedbackValue(setting.feedback)
+  }, [setting])
 
   useEffect(() => {
     echo.time = timeValue
@@ -16,12 +23,23 @@ export default function Echo ({echo}) {
     echo.feedback = feedbackValue
   }, [feedbackValue, echo])
 
+  useEffect(() => {
+    setCurrentSetting({...setting, feedback: feedbackValue, time: timeValue})
+  }, [feedbackValue, timeValue])
+
+
   return (
-    <div className='echo box'>
-      <label>time</label><br/>
-      <input type='range' min='0' max='0.5' step='0.01' value={timeValue} onChange={(e)=>{setTimeValue(Number(e.target.value))}} /><br/>
-      <label>feedback</label><br/>
-      <input type='range' min='0' max='0.8' step='0.01' value={feedbackValue} onChange={(e)=>{setFeedbackValue(Number(e.target.value))}} />
-    </div>
+    <fieldset className='echo box'>
+      <legend>DELAY</legend>
+      <div className='param'>
+        <label>time</label>
+        <input type='range' min='0' max='0.5' step='0.01' value={timeValue} onChange={(e)=>{setTimeValue(Number(e.target.value))}} />
+      </div>
+      <div className='param'>
+        <label>repeat</label>
+        <input type='range' min='0' max='0.8' step='0.01' value={feedbackValue} onChange={(e)=>{setFeedbackValue(Number(e.target.value))}} />
+      </div>
+
+    </fieldset>
   )
 }

@@ -3,18 +3,30 @@ import { usePreset } from '../Preset';
 
 export default function Detune ({setDetune}) {
 
-  const preset = usePreset();
+  const setting = usePreset().currentSetting;
+  const setCurrentSetting = usePreset().setCurrentSetting;
 
-  const [value, setValue] = useState(preset.detune)
+  const [value, setValue] = useState(setting.detune)
+
+  useEffect(() => {
+    setValue(setting.detune)
+  }, [setting])
 
   useEffect(() => {
     setDetune(value)
   }, [value, setDetune])
 
+  useEffect(() => {
+    setCurrentSetting({...setting, detune: value})
+  }, [value])
+
   return (
-    <div className='detune box'>
-      <label>detune</label><br/>
-      <input type='range' min='0' max='11' step='1' value={value} onChange={(e)=>{setValue(Number(e.target.value))}} />
-    </div>
+    <fieldset className='detune box'>
+      <legend>DETUNE</legend>
+      <div className='param'>
+        <label>pitch</label>
+        <input type='range' min='0' max='11' step='1' value={value} onChange={(e)=>{setValue(Number(e.target.value))}} />
+      </div>
+    </fieldset>
   )
 }

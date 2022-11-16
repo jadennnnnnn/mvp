@@ -3,12 +3,30 @@ import { usePreset } from '../Preset';
 
 export default function ADSR ({adsr}) {
 
-  const preset = usePreset();
+  const setting = usePreset().currentSetting;
+  const setCurrentSetting = usePreset().setCurrentSetting;
 
-  const [attackValue, setAttackValue] = useState(preset.attack)
-  const [decayValue, setDecayValue] = useState(preset.decay)
-  const [sustainValue, setSustainValue] = useState(preset.sustain)
-  const [releaseValue, setReleaseValue] = useState(preset.release)
+
+  const [attackValue, setAttackValue] = useState(setting.attack)
+  const [decayValue, setDecayValue] = useState(setting.decay)
+  const [sustainValue, setSustainValue] = useState(setting.sustain)
+  const [releaseValue, setReleaseValue] = useState(setting.release)
+
+  useEffect(() => {
+    setAttackValue(setting.attack)
+    setDecayValue(setting.decay)
+    setSustainValue(setting.sustain)
+    setReleaseValue(setting.release)
+  }, [setting])
+
+  useEffect(() => {
+    setCurrentSetting({...setting,
+      attack: attackValue,
+      decay: decayValue,
+      sustain: sustainValue,
+      release: releaseValue
+    })
+  }, [attackValue, decayValue, sustainValue, releaseValue])
 
   useEffect(() => {
     adsr.attack = attackValue
@@ -27,19 +45,29 @@ export default function ADSR ({adsr}) {
   }, [adsr, releaseValue])
 
   return (
-    <div className='adsr box'>
-      <label>attack:</label><br/>
-      <input type='range' min='0' max='1' step='0.01' value={attackValue} onChange={(e)=>{setAttackValue(Number(e.target.value))}} /><br/>
+    <fieldset className='adsr box'>
+      <legend>ADSR</legend>
 
-      <label>decay:</label><br/>
-      <input type='range' min='0' max='1' step='0.1' value={decayValue} onChange={(e)=>{setDecayValue(Number(e.target.value))}} /><br/>
+      <div className='param'>
+        <label>attack</label>
+        <input type='range' min='0' max='1' step='0.01' value={attackValue} onChange={(e)=>{setAttackValue(Number(e.target.value))}} />
+      </div>
 
-      <label>sustain:</label><br/>
-      <input type='range' min='0' max='1' step='0.1' value={sustainValue} onChange={(e)=>{setSustainValue(Number(e.target.value))}} /><br/>
+      <div className='param'>
+        <label>decay</label>
+        <input type='range' min='0' max='1' step='0.01' value={decayValue} onChange={(e)=>{setDecayValue(Number(e.target.value))}} />
+      </div>
 
-      <label>release:</label><br/>
-      <input type='range' min='0' max='1' step='0.1' value={releaseValue} onChange={(e)=>{setReleaseValue(Number(e.target.value))}} />
+      <div className='param'>
+        <label>sustain</label>
+        <input type='range' min='0' max='1' step='0.1' value={sustainValue} onChange={(e)=>{setSustainValue(Number(e.target.value))}} />
+      </div>
 
-    </div>
+      <div className='param'>
+        <label>release</label>
+        <input type='range' min='0' max='1' step='0.1' value={releaseValue} onChange={(e)=>{setReleaseValue(Number(e.target.value))}} />
+      </div>
+
+    </fieldset>
   )
 }

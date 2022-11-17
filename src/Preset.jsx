@@ -39,16 +39,28 @@ export function PresetProvider({children}) {
 
   const [currentPreset, setCurrentPreset] = useState(defaultPreset)
   const [currentSetting, setCurrentSetting] = useState(currentPreset)
-  const [presetList, setPresetList] = useState(() => (JSON.parse(localStorage.getItem('presets')) || {Default: defaultPreset}))
+  const [presetList, setPresetList] = useState(() => (JSON.parse(localStorage.getItem('presets'))) || {})
+
+  const deletePreset = (name, e) => {
+    e.preventDefault();
+    const newPresetList = {...presetList};
+    delete newPresetList[name];
+    localStorage.setItem('presets', JSON.stringify(newPresetList));
+    setPresetList(newPresetList);
+  }
 
   return (
     <PresetContext.Provider value={{currentSetting: currentPreset, setCurrentSetting: setCurrentSetting}}>
       <div className='col-1-3'>
         <div className='box preset-box'>
           <div className='preset-title'> PRESETS: </div>
+          <div className='preset' onClick={() => {setCurrentPreset(defaultPreset)}}>Default</div>
           <div className='preset' onClick={() => {setCurrentPreset(randomPreset)}}>Random</div>
           {Object.keys(presetList).map((preset, index) => (
-            <div className='preset' key={index} onClick={() => {setCurrentPreset(presetList[preset])}}>{preset}</div>
+            <div className='preset' key={index} onClick={(e) => {if (e.target.className !== 'delete') {setCurrentPreset(presetList[preset])}}}>
+              {preset}
+              <button className='delete' onClick={(e)=>{deletePreset(preset, e)}}>x</button>
+            </div>
             ))}
         </div>
         <div className='preset-buttons'>
@@ -58,7 +70,7 @@ export function PresetProvider({children}) {
         </div>
       </div>
       {children}
-      {saveModal ? <SaveModal currentSetting={currentSetting}/> : null}
+      {saveModal ? <SaveModal currentSetting={currentSetting} setSaveModal={setSaveModal} presetList={presetList} setPresetList={setPresetList}/> : null}
     </PresetContext.Provider>
   )
 

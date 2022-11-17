@@ -20,6 +20,19 @@ span {
   font-size: smaller;
 }
 
+table, th, td {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-collapse: collapse;
+}
+
+table {
+  width: 100%;
+}
+
+td {
+  text-align: center;
+}
+
 datalist {
   display: flex;
   flex-direction: column;
@@ -72,11 +85,14 @@ option {
 }
 
 .preset {
+  position: relative;
   padding: 1%;
   padding-left: 5%;
   margin: 3%;
   background-color: rgba(0, 0, 0, 0.07);
   cursor: pointer;
+  font-style: italic;
+  font-size: small;
 }
 
 .preset-title {
@@ -97,6 +113,14 @@ option {
   cursor: pointer;
   background-color: transparent;
   width: 33%;
+}
+
+.delete {
+  position: absolute;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  right: 0;
 }
 
 
@@ -233,4 +257,47 @@ label {
   margin-right: calc(var(--width) / -2);
   z-index: 2;
   color: white;
+}
+
+.modal {
+  display:  block;
+  z-index:  100;
+  position:  fixed;
+  backdrop-filter: blur(5px);
+  width:  100%;
+  height:  100%;
+  top:  0;
+  left:  0;
+}
+
+.modal input[type='text'] {
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+.modal-content {
+  display:  absolute;
+  background-color:  white;
+  margin-top:  25%;
+  margin-left:  50%;
+  transform:  translate(-50%, -50%);
+  overflow:  auto;
+  border:  1px solid black;
+  padding:  2%;
+  min-width: 40%;
+  width:  fit-content;
+  height:  fit-content;
+}
+
+.modal button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.exit {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  border: none;
 }

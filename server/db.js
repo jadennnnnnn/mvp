@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-mongoose.connect(`mongodb://localhost:27017/${process.env.DB_NAME}`)
+mongoose.connect(`${process.env.DB_LINK}/${process.env.DB_NAME}`)
   .then(()=>{console.log('db connected')})
 
 const PresetSchema = new mongoose.Schema({

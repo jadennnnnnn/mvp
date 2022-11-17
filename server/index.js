@@ -56,4 +56,3 @@ app.put('/presets/:id', (req, res) => {
 const PORT = process.env.PORT;
 
 app.listen(PORT);
-console.log(`Server listening at localhost:${PORT}`);

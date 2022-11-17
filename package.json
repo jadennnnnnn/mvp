@@ -17,7 +17,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "client-dev": "react-scripts start",
+    "start": "PORT=3000 react-scripts start",
     "server-dev": "npx nodemon --watch server server/index.js",
     "build": "react-scripts build",
     "test": "react-scripts test",

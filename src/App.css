@@ -251,11 +251,12 @@ label {
   top: 84%;
   left: 50%;
   transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
 .white {
   --width: 66px;
-  background-color: white;
+  background-color: transparent;
   border: 1px solid #333;
 }
 
@@ -365,4 +366,34 @@ label {
 .search td {
   text-align: left;
   font-size: small;
+}
+
+@media only screen and (max-device-width: 1000px) {
+  .white {
+    --width: 37px;
+  }
+
+  .black {
+    --width: 24px;
+  }
+
+  .bottom-col {
+    min-height: 150px;
+  }
+
+  .App {
+    width: 90vw;
+  }
+
+  .col-1-3 {
+    min-height: 180px;
+  }
+
+  .vertical-slider {
+    height: 180px;
+  }
+
+  .enable-keyboard {
+    display: none;
+  }
 }

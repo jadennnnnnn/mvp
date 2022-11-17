@@ -96,6 +96,12 @@ export default function Keys ({noteOn, noteOff, enableKeyboard}) {
   })
 
   function handleEvent (e) {
+    if (e.type === 'touchstart') {
+      noteOn(NOTES[e.target.dataset.note], e.target.dataset.note);
+    }
+    if (e.type === 'touchend') {
+      noteOff(e.target.dataset.note);
+    }
     if (e.type === 'mousedown') {
       noteOn(NOTES[e.target.dataset.note], e.target.dataset.note);
     }

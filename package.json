@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "npx nodemon --watch server server/index.js",
-    "server": "npx nodemon --watch server server/index.js",
+    "client": "react-scripts start",
     "build": "react-scripts build",
     "eject": "react-scripts eject"
   },

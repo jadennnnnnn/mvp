@@ -9,6 +9,9 @@ const app = express();
 app.use(express.json());
 app.use(morgan('combined'))
 
+
+app.use(express.static("build"));
+
 app.get('/presets', (req, res) => {
   controllers.searchPreset(req.query.author, req.query.name, (err, result) => {
     if (err) {

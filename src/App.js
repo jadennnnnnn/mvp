@@ -113,12 +113,14 @@ export default function App() {
     }
   }
 
+  const [enableKeyboard, setEnableKeyboard] = useState(false);
+
   return (
   <div className="App">
         <div className='vertical-slider'>
           <MasterVolume masterVolume={masterVolume}/>
         </div>
-        <PresetProvider>
+        <PresetProvider setEnableKeyboard={setEnableKeyboard}>
           <div className='col-1-3'>
             <Waveform setWaveform={setWaveform}/>
             <ADSR adsr={adsr} />
@@ -129,8 +131,11 @@ export default function App() {
             <Echo echo={echo} />
           </div>
         </PresetProvider>
+        <div className='enable-keyboard' onClick={()=>{setEnableKeyboard(enableKeyboard => !enableKeyboard)}}>
+          {enableKeyboard ? 'keyboard on' : 'keyboard off' }
+        </div>
         <div className='bottom-col'>
-          <Keys noteOn={noteOn} noteOff={noteOff} createOscillators={createOscillators}/>
+          <Keys noteOn={noteOn} noteOff={noteOff} createOscillators={createOscillators} enableKeyboard={enableKeyboard}/>
         </div>
     </div>
   );

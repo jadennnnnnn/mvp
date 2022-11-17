@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import axios from 'axios';
 
-export default function SaveModal ({currentSetting, setSaveModal, presetList, setPresetList}) {
+export default function PublishModal ({currentSetting, setPublishModal}) {
 
   const [name, setName] = useState('')
+  const [author, setAuthor] = useState('')
 
   const waveforms = [
     'sine',
@@ -11,28 +13,29 @@ export default function SaveModal ({currentSetting, setSaveModal, presetList, se
     'triangle'
   ]
 
-  const savePreset = (name, setting, e) => {
+  const publishPreset = (name, setting, e) => {
     e.preventDefault();
-    if (Object.keys(presetList).includes(name)) {
-      alert ('name already exist')
-    } else {
-      const newPresetList = {...presetList};
-      newPresetList[name] = setting;
-      localStorage.setItem('presets', JSON.stringify(newPresetList));
-      setPresetList(newPresetList);
-    }
-    setSaveModal(false);
+    axios.post('/presets', {
+      author: author,
+      name: name,
+      preset: currentSetting
+    })
+    setPublishModal(false);
   }
 
   return (
     <div className='modal'>
       <div className='modal-content'>
 
-        <button className='exit' onClick={()=>setSaveModal(false)}>x</button>
+        <button className='exit' onClick={()=>setPublishModal(false)}>x</button>
 
         <form>
-          <input type='text' placeholder='name here' onChange={(e)=>{setName(e.target.value)}}/>
-          <button onClick={(e)=>{savePreset(name, currentSetting, e)}}>save</button>
+          <label style={{textAlign: 'center'}}>author:</label>
+          <input type='text' placeholder='author name here' onChange={(e)=>{setAuthor(e.target.value)}}/><br/>
+          <label style={{textAlign: 'center'}}>preset:</label>
+          <input type='text' placeholder='preset name here' onChange={(e)=>{setName(e.target.value)}}/>
+
+          <button onClick={(e)=>{publishPreset(name, currentSetting, e)}}>publish</button>
         </form><br/>
         <table>
           <tbody>

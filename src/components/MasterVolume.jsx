@@ -10,7 +10,7 @@ export default function MasterVolume ({masterVolume}) {
 
   return (
     <fieldset className='volume box vertical-box'>
-      <legend>volume</legend><br/>
+      <legend style={{fontStyle: 'normal'}}>volume</legend><br/>
       <input type='range' min='0' max='.1' step='.01' value={value} onChange={(e)=>{setValue(Number(e.target.value))}} />
     </fieldset>
   )

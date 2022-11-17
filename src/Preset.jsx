@@ -1,5 +1,7 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import SaveModal from './components/SaveModal.jsx';
+import Search from './components/Search.jsx';
+import PublishModal from './components/PublishModal.jsx';
 
 const PresetContext = createContext();
 
@@ -7,9 +9,17 @@ export function usePreset() {
   return useContext(PresetContext);
 }
 
-export function PresetProvider({children}) {
+export function PresetProvider({children, setEnableKeyboard}) {
 
   const [saveModal, setSaveModal] = useState(false);
+  const [publishModal, setPublishModal] = useState(false);
+  const [searchOn, setSearchOn] = useState(false);
+
+  useEffect(() => {
+    if (saveModal || publishModal) {
+      setEnableKeyboard(false);
+    }
+  }, [saveModal, publishModal])
 
   const defaultPreset = {
     waveform: 0,
@@ -49,6 +59,8 @@ export function PresetProvider({children}) {
     setPresetList(newPresetList);
   }
 
+
+
   return (
     <PresetContext.Provider value={{currentSetting: currentPreset, setCurrentSetting: setCurrentSetting}}>
       <div className='col-1-3'>
@@ -64,13 +76,15 @@ export function PresetProvider({children}) {
             ))}
         </div>
         <div className='preset-buttons'>
-          <button>search</button>
-          <button onClick={() => setSaveModal(saveModal => !saveModal)}>save</button>
-          <button>publish</button>
+          <button onClick={() => setSaveModal(modal => !modal)}>save</button>
+          <button onClick={() => setSearchOn(search => !search)}>search</button>
+          <button onClick={() => setPublishModal(modal => !modal)}>publish</button>
         </div>
       </div>
+      <Search searchOn={searchOn} setCurrentPreset={setCurrentPreset} presetList={presetList} setPresetList={setPresetList}/>
       {children}
       {saveModal ? <SaveModal currentSetting={currentSetting} setSaveModal={setSaveModal} presetList={presetList} setPresetList={setPresetList}/> : null}
+      {publishModal ? <PublishModal currentSetting={currentSetting} setPublishModal={setPublishModal}/> : null}
     </PresetContext.Provider>
   )
 

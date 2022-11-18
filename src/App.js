@@ -117,6 +117,7 @@ export default function App() {
 
   return (
   <div className="App">
+    <div className='controls'>
         <div className='vertical-slider'>
           <MasterVolume masterVolume={masterVolume}/>
         </div>
@@ -131,6 +132,7 @@ export default function App() {
             <Echo echo={echo} />
           </div>
         </PresetProvider>
+    </div>
         <div className='enable-keyboard' onClick={()=>{setEnableKeyboard(enableKeyboard => !enableKeyboard)}}>
           {enableKeyboard ? 'keyboard on' : 'keyboard off' }
         </div>

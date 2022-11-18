@@ -374,30 +374,38 @@ label {
 }
 
 @media only screen and (max-device-width: 1000px) {
+  .key {
+    height: calc(var(--width) * 3);
+    width: var(--width);
+    cursor: pointer;
+    position: relative;
+  }
+
   .white {
-    --width: 37px;
+    --width: 8vw;
   }
 
   .black {
-    --width: 24px;
+    --width: 5vw;
   }
 
   .bottom-col {
+    position: fixed;
     min-height: 150px;
-  }
-
-  .App {
-    width: 98vw;
+    border-top: none;
+    bottom: 0;
+    padding: 1%;
+    height: 49%;
   }
 
   .col-1-3 {
+    display: inline-block;
     min-height: 180px;
     overflow: auto;
-    padding: 0;
+    padding: 1%;
     min-width: 200px;
     margin: 0;
     border: none;
-
   }
 
   .vertical-slider {
@@ -409,15 +417,31 @@ label {
     display: none;
   }
 
+  .box {
+    display: inline-block;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    width: 95%;
+    padding: 1%;
+    margin: 2%;
+  }
+
   .App {
-    position: fixed;
-    top: auto;
-    left: auto;
-    bottom: 0;
+    position: relative;
+    top: 0;
+    left: 0;
     transform: translate(0, 0);
     border: none;
-    height: fit-content;
+    height: 100vh;
+    max-height: 500px;
     width: 100vw;
     padding: 0;
+  }
+
+  .controls {
+    position: absolute;
+    height: 46%;
+    margin: 0;
+    overflow: auto;
   }
 }

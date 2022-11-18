@@ -18,6 +18,8 @@ label {
 
 span {
   font-size: smaller;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 table, th, td {

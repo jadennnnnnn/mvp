@@ -109,7 +109,7 @@ export default function App() {
       const relEndTime = now + relDuration;
       activeNotes[key].gainNode.gain.setValueAtTime(activeNotes[key].gainNode.gain.value, now);
       activeNotes[key].gainNode.gain.linearRampToValueAtTime(0, relEndTime);
-      setTimeout(()=>{activeNotes[key].oscBank.forEach((osc)=>{osc.stop()})}, relDuration * 1000)
+      activeNotes[key].oscBank.forEach((osc)=>{osc.stop(relEndTime)})
     }
   }
 

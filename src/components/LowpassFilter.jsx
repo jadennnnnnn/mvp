@@ -3,19 +3,20 @@ import { usePreset } from '../Preset';
 
 export default function LowpassFilter ({actx, lowpassFilter}) {
 
+  const currentPreset = usePreset().currentPreset;
   const setting = usePreset().currentSetting;
   const setCurrentSetting = usePreset().setCurrentSetting;
 
 
-  const [freq, setFreq] = useState(setting.frequency)
-  const [q, setQ] = useState(setting.q)
+  const [freq, setFreq] = useState(currentPreset.frequency)
+  const [q, setQ] = useState(currentPreset.q)
 
   const maxFilterFreq = actx.sampleRate / 2;
 
   useEffect(() => {
-    setFreq(setting.frequency)
-    setQ(setting.q)
-  }, [setting])
+    setFreq(currentPreset.frequency)
+    setQ(currentPreset.q)
+  }, [currentPreset])
 
   useEffect(() => {
     lowpassFilter.frequency = freq * maxFilterFreq;

@@ -59,10 +59,8 @@ export function PresetProvider({children, setEnableKeyboard}) {
     setPresetList(newPresetList);
   }
 
-
-
   return (
-    <PresetContext.Provider value={{currentSetting: currentPreset, setCurrentSetting: setCurrentSetting}}>
+    <PresetContext.Provider value={{currentPreset: currentPreset, currentSetting: currentSetting, setCurrentSetting: setCurrentSetting}}>
       <div className='col-1-3'>
         <div className='box preset-box'>
           <div className='preset-title'> PRESETS: </div>

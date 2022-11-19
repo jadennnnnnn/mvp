@@ -3,14 +3,15 @@ import { usePreset } from '../Preset';
 
 export default function Detune ({setDetune}) {
 
+  const currentPreset = usePreset().currentPreset;
   const setting = usePreset().currentSetting;
   const setCurrentSetting = usePreset().setCurrentSetting;
 
-  const [value, setValue] = useState(setting.detune)
+  const [value, setValue] = useState(currentPreset.detune)
 
   useEffect(() => {
-    setValue(setting.detune)
-  }, [setting])
+    setValue(currentPreset.detune)
+  }, [currentPreset])
 
   useEffect(() => {
     setDetune(value)

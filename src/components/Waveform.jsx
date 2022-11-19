@@ -3,10 +3,11 @@ import { usePreset } from '../Preset';
 
 export default function Waveform ({setWaveform}) {
 
+  const currentPreset = usePreset().currentPreset;
   const setting = usePreset().currentSetting;
   const setCurrentSetting = usePreset().setCurrentSetting;
 
-  const [value, setValue] = useState(setting.waveform)
+  const [value, setValue] = useState(currentPreset.waveform)
 
   const [waveforms] = useState([
     'sine',
@@ -16,8 +17,8 @@ export default function Waveform ({setWaveform}) {
   ])
 
   useEffect(() => {
-    setValue(setting.waveform)
-  }, [setting])
+    setValue(currentPreset.waveform)
+  }, [currentPreset])
 
   useEffect(() => {
     setWaveform(waveforms[value])

@@ -3,17 +3,18 @@ import { usePreset } from '../Preset';
 
 export default function Echo ({echo}) {
 
+  const currentPreset = usePreset().currentPreset;
   const setting = usePreset().currentSetting;
   const setCurrentSetting = usePreset().setCurrentSetting;
 
 
-  const [timeValue, setTimeValue] = useState(setting.time)
-  const [feedbackValue, setFeedbackValue] = useState(setting.feedback)
+  const [timeValue, setTimeValue] = useState(currentPreset.time)
+  const [feedbackValue, setFeedbackValue] = useState(currentPreset.feedback)
 
   useEffect(() => {
-    setTimeValue(setting.time)
-    setFeedbackValue(setting.feedback)
-  }, [setting])
+    setTimeValue(currentPreset.time)
+    setFeedbackValue(currentPreset.feedback)
+  }, [currentPreset])
 
   useEffect(() => {
     echo.time = timeValue

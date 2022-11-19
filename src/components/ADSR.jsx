@@ -3,21 +3,22 @@ import { usePreset } from '../Preset';
 
 export default function ADSR ({adsr}) {
 
+  const currentPreset = usePreset().currentPreset;
   const setting = usePreset().currentSetting;
   const setCurrentSetting = usePreset().setCurrentSetting;
 
 
-  const [attackValue, setAttackValue] = useState(setting.attack)
-  const [decayValue, setDecayValue] = useState(setting.decay)
-  const [sustainValue, setSustainValue] = useState(setting.sustain)
-  const [releaseValue, setReleaseValue] = useState(setting.release)
+  const [attackValue, setAttackValue] = useState(currentPreset.attack)
+  const [decayValue, setDecayValue] = useState(currentPreset.decay)
+  const [sustainValue, setSustainValue] = useState(currentPreset.sustain)
+  const [releaseValue, setReleaseValue] = useState(currentPreset.release)
 
   useEffect(() => {
-    setAttackValue(setting.attack)
-    setDecayValue(setting.decay)
-    setSustainValue(setting.sustain)
-    setReleaseValue(setting.release)
-  }, [setting])
+    setAttackValue(currentPreset.attack)
+    setDecayValue(currentPreset.decay)
+    setSustainValue(currentPreset.sustain)
+    setReleaseValue(currentPreset.release)
+  }, [currentPreset])
 
   useEffect(() => {
     setCurrentSetting({...setting,

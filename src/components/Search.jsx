@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function Search ({searchOn, setCurrentPreset, presetList, setPresetList}) {
+export default function Search ({searchOn, setCurrentSetting, setCurrentPreset, presetList, setPresetList}) {
 
   const [name, setName] = useState('')
   const [author, setAuthor] = useState('')
@@ -62,7 +62,7 @@ export default function Search ({searchOn, setCurrentPreset, presetList, setPres
               <tbody>
                 {searchResults.map((result, index) => (
                   <tr key={index}>
-                    <td style={{cursor: 'pointer'}} onClick={()=>{setCurrentPreset(result.preset)}}>{result.name}</td>
+                    <td style={{cursor: 'pointer'}} onClick={()=>{setCurrentPreset(result.preset); setCurrentSetting(result.preset)}}>{result.name}</td>
                     <td style={{cursor: 'pointer'}} onClick={() => {deletePreset(result._id)}}>x</td>
                     <td>{result.author}</td>
                     <td style={{cursor: 'pointer'}} onClick={()=>{likePreset(result._id)}}>{result.likes} 👍</td>

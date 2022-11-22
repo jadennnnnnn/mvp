@@ -79,7 +79,7 @@ export function PresetProvider({children, setEnableKeyboard}) {
           <button onClick={() => setPublishModal(modal => !modal)}>publish</button>
         </div>
       </div>
-      <Search searchOn={searchOn} setCurrentPreset={setCurrentPreset} presetList={presetList} setPresetList={setPresetList}/>
+      <Search searchOn={searchOn} setCurrentSetting={setCurrentSetting} setCurrentPreset={setCurrentPreset} presetList={presetList} setPresetList={setPresetList}/>
       {children}
       {saveModal ? <SaveModal currentSetting={currentSetting} setSaveModal={setSaveModal} presetList={presetList} setPresetList={setPresetList}/> : null}
       {publishModal ? <PublishModal currentSetting={currentSetting} setPublishModal={setPublishModal}/> : null}

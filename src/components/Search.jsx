@@ -29,6 +29,12 @@ export default function Search ({searchOn, setCurrentPreset, presetList, setPres
     searchPreset()
   }, [author, name])
 
+  useEffect(() => {
+    document.querySelector('.search').addEventListener('input', (e) => {
+      window.preventDefault();
+    })
+  }, [])
+
   const display = searchOn ? {} : { display: 'none'}
 
 
@@ -43,26 +49,28 @@ export default function Search ({searchOn, setCurrentPreset, presetList, setPres
         </form>
 
         {searchResults ?
-          <table>
-            <thead>
-              <tr>
-                <th style={{width: '55%'}}>preset name</th>
-                <th style={{width: '10%'}}></th>
-                <th>author</th>
-                <th>likes</th>
-              </tr>
-            </thead>
-            <tbody>
-              {searchResults.map((result, index) => (
-                <tr key={index}>
-                  <td style={{cursor: 'pointer'}} onClick={()=>{setCurrentPreset(result.preset)}}>{result.name}</td>
-                  <td style={{cursor: 'pointer'}} onClick={() => {deletePreset(result._id)}}>x</td>
-                  <td>{result.author}</td>
-                  <td style={{cursor: 'pointer'}} onClick={()=>{likePreset(result._id)}}>{result.likes} 👍</td>
+          <div className='search-box'>
+            <table>
+              <thead>
+                <tr>
+                  <th style={{width: '55%'}}>preset name</th>
+                  <th style={{width: '10%'}}></th>
+                  <th>author</th>
+                  <th>likes</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {searchResults.map((result, index) => (
+                  <tr key={index}>
+                    <td style={{cursor: 'pointer'}} onClick={()=>{setCurrentPreset(result.preset)}}>{result.name}</td>
+                    <td style={{cursor: 'pointer'}} onClick={() => {deletePreset(result._id)}}>x</td>
+                    <td>{result.author}</td>
+                    <td style={{cursor: 'pointer'}} onClick={()=>{likePreset(result._id)}}>{result.likes} 👍</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         : null}
       </div>
     </div>

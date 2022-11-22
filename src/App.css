@@ -356,6 +356,17 @@ label {
   border: none;
 }
 
+.search-box {
+  height: 180px;
+  overflow: auto;
+}
+
+.search-box thead {
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
 .search table, th, td  {
   border: none;
 }
@@ -418,12 +429,13 @@ label {
   }
 
   .box {
-    display: inline-block;
+    display: flex;
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.15);
     width: 95%;
     padding: 1%;
     margin: 2%;
+
   }
 
   .App {

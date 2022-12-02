@@ -15,14 +15,6 @@ export function PresetProvider({children, masterVolume}) {
   const [publishModal, setPublishModal] = useState(false);
   const [searchOn, setSearchOn] = useState(false);
 
-  useEffect(() => {
-    if (saveModal || publishModal) {
-      masterVolume.gain.value = 0;
-    } else {
-      masterVolume.gain.value = document.querySelector('#master-volume-gain').value;
-    }
-  }, [saveModal, publishModal])
-
   const defaultPreset = {
     waveform: 0,
     detune: 0,
@@ -85,10 +77,10 @@ export function PresetProvider({children, masterVolume}) {
           <button onClick={() => setPublishModal(modal => !modal)}>publish</button>
         </div>
       </div>
-      <Search searchOn={searchOn} setCurrentSetting={setCurrentSetting} setCurrentPreset={setCurrentPreset} presetList={presetList} setPresetList={setPresetList} masterVolume={masterVolume}/>
+      <Search searchOn={searchOn} setCurrentSetting={setCurrentSetting} setCurrentPreset={setCurrentPreset} presetList={presetList} setPresetList={setPresetList} masterVolume={masterVolume} saveModal={saveModal} publishModal={publishModal}/>
       {children}
-      {saveModal ? <SaveModal currentSetting={currentSetting} setSaveModal={setSaveModal} presetList={presetList} setPresetList={setPresetList}/> : null}
-      {publishModal ? <PublishModal currentSetting={currentSetting} setPublishModal={setPublishModal}/> : null}
+      {saveModal ? <SaveModal currentSetting={currentSetting} setSaveModal={setSaveModal} presetList={presetList} setPresetList={setPresetList} masterVolume={masterVolume} /> : null}
+      {publishModal ? <PublishModal currentSetting={currentSetting} setPublishModal={setPublishModal} masterVolume={masterVolume}/> : null}
     </PresetContext.Provider>
   )
 

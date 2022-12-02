@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-export default function PublishModal ({currentSetting, setPublishModal}) {
+export default function PublishModal ({currentSetting, setPublishModal, masterVolume}) {
 
   const [name, setName] = useState('')
   const [author, setAuthor] = useState('')
@@ -31,9 +31,9 @@ export default function PublishModal ({currentSetting, setPublishModal}) {
 
         <form>
           <label style={{textAlign: 'center'}}>author:</label>
-          <input type='text' placeholder='author name here' onChange={(e)=>{setAuthor(e.target.value)}}/><br/>
+          <input  onFocus={()=>{masterVolume.gain.value = 0}} onBlur={()=>{masterVolume.gain.value = document.querySelector('#master-volume-gain').value}} type='text' placeholder='author name here' onChange={(e)=>{setAuthor(e.target.value)}}/><br/>
           <label style={{textAlign: 'center'}}>preset:</label>
-          <input type='text' placeholder='preset name here' onChange={(e)=>{setName(e.target.value)}}/>
+          <input  onFocus={()=>{masterVolume.gain.value = 0}} onBlur={()=>{masterVolume.gain.value = document.querySelector('#master-volume-gain').value}} type='text' placeholder='preset name here' onChange={(e)=>{setName(e.target.value)}}/>
 
           <button onClick={(e)=>{publishPreset(name, currentSetting, e)}}>publish</button>
         </form><br/>

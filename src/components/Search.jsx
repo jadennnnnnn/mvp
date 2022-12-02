@@ -27,19 +27,7 @@ export default function Search ({searchOn, setCurrentSetting, setCurrentPreset, 
 
   useEffect(() => {
     searchPreset()
-    masterVolume.gain.value = 0;
   }, [author, name])
-
-  useEffect(() => {
-    document.querySelector('.App').addEventListener('click', () => {
-      masterVolume.gain.value = document.querySelector('#master-volume-gain').value;
-    })
-    return () => {
-      document.querySelector('.App').removeEventListener('click', () => {
-        masterVolume.gain.value = document.querySelector('#master-volume-gain').value;
-      })
-    }
-  }, [])
 
   const display = searchOn ? {} : { display: 'none'}
 
@@ -49,9 +37,9 @@ export default function Search ({searchOn, setCurrentSetting, setCurrentPreset, 
       <div className='search'>
         <form>
           <span style={{textAlign: 'center'}}>author: </span>
-          <input type='text' placeholder='author name here' onChange={(e)=>{setAuthor(e.target.value)}}/><br/>
+          <input onFocus={()=>{masterVolume.gain.value = 0}} onBlur={()=>{masterVolume.gain.value = document.querySelector('#master-volume-gain').value}} type='text' placeholder='author name here' onChange={(e)=>{setAuthor(e.target.value)}}/><br/>
           <span style={{textAlign: 'center'}}>preset: </span>
-          <input type='text' placeholder='preset name here' onChange={(e)=>{setName(e.target.value)}}/>
+          <input onFocus={()=>{masterVolume.gain.value = 0}} onBlur={()=>{masterVolume.gain.value = document.querySelector('#master-volume-gain').value}} type='text' placeholder='preset name here' onChange={(e)=>{setName(e.target.value)}}/>
         </form>
 
         {searchResults ?
@@ -80,10 +68,5 @@ export default function Search ({searchOn, setCurrentSetting, setCurrentPreset, 
         : null}
       </div>
     </div>
-
-
-
-
-
   )
 }

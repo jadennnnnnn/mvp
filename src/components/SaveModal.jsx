@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function SaveModal ({currentSetting, setSaveModal, presetList, setPresetList}) {
+export default function SaveModal ({currentSetting, setSaveModal, presetList, setPresetList, masterVolume}) {
 
   const [name, setName] = useState('')
 
@@ -31,7 +31,7 @@ export default function SaveModal ({currentSetting, setSaveModal, presetList, se
         <button className='exit' onClick={()=>setSaveModal(false)}>x</button>
 
         <form>
-          <input type='text' placeholder='name here' onChange={(e)=>{setName(e.target.value)}}/>
+          <input  onFocus={()=>{masterVolume.gain.value = 0}} onBlur={()=>{masterVolume.gain.value = document.querySelector('#master-volume-gain').value}} type='text' placeholder='name here' onChange={(e)=>{setName(e.target.value)}}/>
           <button onClick={(e)=>{savePreset(name, currentSetting, e)}}>save</button>
         </form><br/>
         <table>

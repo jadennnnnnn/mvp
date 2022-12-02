@@ -51,6 +51,10 @@ export function PresetProvider({children, setEnableKeyboard}) {
   const [currentSetting, setCurrentSetting] = useState(currentPreset)
   const [presetList, setPresetList] = useState(() => (JSON.parse(localStorage.getItem('presets'))) || {})
 
+  useEffect(() => {
+    setCurrentSetting(currentPreset)
+  }, [currentPreset])
+
   const deletePreset = (name, e) => {
     e.preventDefault();
     const newPresetList = {...presetList};

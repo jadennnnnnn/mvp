@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function Search ({searchOn, setCurrentSetting, setCurrentPreset, presetList, setPresetList}) {
+export default function Search ({searchOn, setCurrentSetting, setCurrentPreset, presetList, setPresetList, masterVolume}) {
 
   const [name, setName] = useState('')
   const [author, setAuthor] = useState('')
@@ -27,12 +27,18 @@ export default function Search ({searchOn, setCurrentSetting, setCurrentPreset, 
 
   useEffect(() => {
     searchPreset()
+    masterVolume.gain.value = 0;
   }, [author, name])
 
   useEffect(() => {
-    document.querySelector('.search').addEventListener('input', (e) => {
-      window.preventDefault();
+    document.querySelector('.App').addEventListener('click', () => {
+      masterVolume.gain.value = document.querySelector('#master-volume-gain').value;
     })
+    return () => {
+      document.querySelector('.App').removeEventListener('click', () => {
+        masterVolume.gain.value = document.querySelector('#master-volume-gain').value;
+      })
+    }
   }, [])
 
   const display = searchOn ? {} : { display: 'none'}

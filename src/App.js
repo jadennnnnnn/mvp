@@ -121,7 +121,7 @@ export default function App() {
         <div className='vertical-slider'>
           <MasterVolume masterVolume={masterVolume}/>
         </div>
-        <PresetProvider setEnableKeyboard={setEnableKeyboard}>
+        <PresetProvider masterVolume={masterVolume}>
           <div className='col-1-3'>
             <Waveform setWaveform={setWaveform}/>
             <ADSR adsr={adsr} />

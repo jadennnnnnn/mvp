@@ -9,7 +9,7 @@ export function usePreset() {
   return useContext(PresetContext);
 }
 
-export function PresetProvider({children, setEnableKeyboard}) {
+export function PresetProvider({children, masterVolume}) {
 
   const [saveModal, setSaveModal] = useState(false);
   const [publishModal, setPublishModal] = useState(false);
@@ -17,7 +17,9 @@ export function PresetProvider({children, setEnableKeyboard}) {
 
   useEffect(() => {
     if (saveModal || publishModal) {
-      setEnableKeyboard(false);
+      masterVolume.gain.value = 0;
+    } else {
+      masterVolume.gain.value = document.querySelector('#master-volume-gain').value;
     }
   }, [saveModal, publishModal])
 
@@ -83,7 +85,7 @@ export function PresetProvider({children, setEnableKeyboard}) {
           <button onClick={() => setPublishModal(modal => !modal)}>publish</button>
         </div>
       </div>
-      <Search searchOn={searchOn} setCurrentSetting={setCurrentSetting} setCurrentPreset={setCurrentPreset} presetList={presetList} setPresetList={setPresetList}/>
+      <Search searchOn={searchOn} setCurrentSetting={setCurrentSetting} setCurrentPreset={setCurrentPreset} presetList={presetList} setPresetList={setPresetList} masterVolume={masterVolume}/>
       {children}
       {saveModal ? <SaveModal currentSetting={currentSetting} setSaveModal={setSaveModal} presetList={presetList} setPresetList={setPresetList}/> : null}
       {publishModal ? <PublishModal currentSetting={currentSetting} setPublishModal={setPublishModal}/> : null}

@@ -61,12 +61,12 @@ export default function ADSR ({adsr}) {
 
       <div className='param'>
         <label>sustain</label>
-        <input type='range' min='0' max='1' step='0.1' value={sustainValue} onChange={(e)=>{setSustainValue(Number(e.target.value))}} />
+        <input type='range' min='0' max='1' step='0.01' value={sustainValue} onChange={(e)=>{setSustainValue(Number(e.target.value))}} />
       </div>
 
       <div className='param'>
         <label>release</label>
-        <input type='range' min='0' max='1' step='0.1' value={releaseValue} onChange={(e)=>{setReleaseValue(Number(e.target.value))}} />
+        <input type='range' min='0' max='1' step='0.01' value={releaseValue} onChange={(e)=>{setReleaseValue(Number(e.target.value))}} />
       </div>
 
     </fieldset>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { usePreset } from '../Preset';
 
-export default function LowpassFilter ({actx, lowpassFilter}) {
+export default function LowpassFilter ({actx, setLowpassFilter}) {
 
   const currentPreset = usePreset().currentPreset;
   const setting = usePreset().currentSetting;
@@ -19,12 +19,8 @@ export default function LowpassFilter ({actx, lowpassFilter}) {
   }, [currentPreset])
 
   useEffect(() => {
-    lowpassFilter.frequency = freq * maxFilterFreq;
-  }, [freq, lowpassFilter, maxFilterFreq])
-
-  useEffect(() => {
-    lowpassFilter.Q = q * 30;
-  }, [q, lowpassFilter])
+    setLowpassFilter({frequency: freq * maxFilterFreq, Q: q * 30})
+  }, [freq, q, maxFilterFreq])
 
   useEffect(() => {
     setCurrentSetting({...setting, frequency: freq, q: q})

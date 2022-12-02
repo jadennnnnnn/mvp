@@ -30,12 +30,10 @@ export default function App() {
     const delayNode = actx.createDelay();
     delayNode.delayTime.value = echo.time * echo.maxDuration;
     delayNode.connect(masterVolume)
-    return delayNode
-  })
-  useEffect(()=>{
     delayNode.connect(delayGain);
     delayGain.connect(delayNode);
-  }, [])
+    return delayNode
+  })
   useEffect(() => {
     delayGain.gain.value = echo.feedback;
     delayNode.delayTime.value = echo.time * echo.maxDuration;
@@ -43,7 +41,22 @@ export default function App() {
 
   const [waveform, setWaveform] = useState('sine');
   const [detune, setDetune] = useState(0);
-  const [lowpassFilter] = useState({frequency: 350, Q: 1})
+  const [lowpassFilter, setLowpassFilter] = useState({frequency: 350, Q: 1})
+
+  const [filter] = useState(() => {
+    const filter = actx.createBiquadFilter()
+    filter.type = 'lowpass';
+    filter.frequency.value = lowpassFilter.frequency;
+    filter.Q.value = lowpassFilter.Q;
+    filter.connect(masterVolume)
+    filter.connect(delayGain)
+    return filter
+  })
+
+  useEffect(() => {
+    filter.frequency.value = lowpassFilter.frequency;
+    filter.Q.value = lowpassFilter.Q;
+  }, [lowpassFilter])
 
   const [adsr] = useState({attack: 0, decay:0, sustain: 1, release: 0});
   const STAGE_MAX_TIME = 2; //seconds
@@ -64,24 +77,7 @@ export default function App() {
 
     const gainNode = new GainNode(actx)
     gainNode.gain.cancelScheduledValues(now);
-    gainNode.connect(masterVolume)
-
-    const filter = actx.createBiquadFilter()
-    filter.type = 'lowpass';
-    filter.frequency.value = lowpassFilter.frequency;
-    filter.Q.value = lowpassFilter.Q;
-    filter.connect(gainNode)
-
-    const lowpassFreq = document.querySelector('#lowpass-freq');
-    const lowpassQ = document.querySelector('#lowpass-q');
-
-    lowpassFreq.addEventListener('input', (e) => {
-      const maxFilterFreq = actx.sampleRate / 2;
-      filter.frequency.value = Number(e.target.value) * maxFilterFreq;
-    });
-    lowpassQ.addEventListener('input', (e) => {
-      filter.Q.value = Number(e.target.value) * 30;
-    });
+    gainNode.connect(filter)
 
     let oscBank;
     if (detune) {
@@ -97,7 +93,7 @@ export default function App() {
 
 
     oscBank.forEach((osc)=>{
-      osc.connect(filter)
+      osc.connect(gainNode)
       //ATTACK -> DECAY -> SUSTAIN
       const atkDuration = adsr.attack * STAGE_MAX_TIME;
       const atkEndTime = now + atkDuration;
@@ -108,12 +104,10 @@ export default function App() {
       gainNode.gain.setTargetAtTime(adsr.sustain, atkEndTime, decayDuration);
     })
 
-    gainNode.connect(delayNode);
-
     if (activeNotes[key]) {
       activeNotes[key].oscBank.forEach((osc)=>{osc.stop()})
     }
-    activeNotes[key] = {oscBank: oscBank, gainNode: gainNode, lowpassFreq: lowpassFreq, lowpassQ: lowpassQ };
+    activeNotes[key] = {oscBank: oscBank, gainNode: gainNode };
   }
   const noteOff = (key) => {
     if (activeNotes[key]) {
@@ -131,15 +125,6 @@ export default function App() {
       activeNotes[key].oscBank.forEach((osc)=>{
         osc.onended = () => {
           activeNotes[key].gainNode.disconnect();
-
-          activeNotes[key].lowpassFreq.removeEventListener('input', (e) => {
-            const maxFilterFreq = actx.sampleRate / 2;
-            filter.frequency.value = Number(e.target.value) * maxFilterFreq;
-          });
-          activeNotes[key].lowpassQ.removeEventListener('input', (e) => {
-            filter.Q.value = Number(e.target.value) * 30;
-          });
-
         }
       })
     }
@@ -160,7 +145,7 @@ export default function App() {
           </div>
           <div className='col-1-3'>
             <Detune setDetune={setDetune}/>
-            <LowpassFilter actx={actx} lowpassFilter={lowpassFilter}/>
+            <LowpassFilter actx={actx} setLowpassFilter={setLowpassFilter}/>
             <Echo setEcho={setEcho} />
           </div>
         </PresetProvider>

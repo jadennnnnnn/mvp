@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Keys from './components/Keys.jsx';
 import Detune from './components/Detune.jsx';
 import Waveform from './components/Waveform.jsx';
@@ -16,6 +16,31 @@ export default function App() {
     masterVolume.connect(actx.destination)
     return masterVolume;
   })
+  const [echo, setEcho] = useState({
+    time: 0,
+    feedback: 0,
+    maxDuration: 2 // seconds
+  })
+  const [delayGain] = useState(() => {
+    const delayGain = actx.createGain();
+    delayGain.gain.value = echo.feedback;
+    return delayGain
+  })
+  const [delayNode] = useState(() => {
+    const delayNode = actx.createDelay();
+    delayNode.delayTime.value = echo.time * echo.maxDuration;
+    delayNode.connect(masterVolume)
+    return delayNode
+  })
+  useEffect(()=>{
+    delayNode.connect(delayGain);
+    delayGain.connect(delayNode);
+  }, [])
+  useEffect(() => {
+    delayGain.gain.value = echo.feedback;
+    delayNode.delayTime.value = echo.time * echo.maxDuration;
+  }, [echo])
+
   const [waveform, setWaveform] = useState('sine');
   const [detune, setDetune] = useState(0);
   const [lowpassFilter] = useState({frequency: 350, Q: 1})
@@ -23,11 +48,6 @@ export default function App() {
   const [adsr] = useState({attack: 0, decay:0, sustain: 1, release: 0});
   const STAGE_MAX_TIME = 2; //seconds
 
-  const echo = {
-    time: 0,
-    feedback: 0,
-    maxDuration: 2 // seconds
-  }
 
   const createOscillators = (freq, detune) => {
     const osc = actx.createOscillator();
@@ -52,11 +72,14 @@ export default function App() {
     filter.Q.value = lowpassFilter.Q;
     filter.connect(gainNode)
 
-    document.querySelector('#lowpass-freq').addEventListener('input', (e) => {
+    const lowpassFreq = document.querySelector('#lowpass-freq');
+    const lowpassQ = document.querySelector('#lowpass-q');
+
+    lowpassFreq.addEventListener('input', (e) => {
       const maxFilterFreq = actx.sampleRate / 2;
       filter.frequency.value = Number(e.target.value) * maxFilterFreq;
     });
-    document.querySelector('#lowpass-q').addEventListener('input', (e) => {
+    lowpassQ.addEventListener('input', (e) => {
       filter.Q.value = Number(e.target.value) * 30;
     });
 
@@ -70,12 +93,7 @@ export default function App() {
       oscBank = [createOscillators(freq, 0)];
     }
 
-    const delayNode = actx.createDelay();
-    delayNode.delayTime.value = echo.time * echo.maxDuration;
-    delayNode.connect(masterVolume)
 
-    const delayGain = actx.createGain();
-    delayGain.gain.value = echo.feedback;
 
 
     oscBank.forEach((osc)=>{
@@ -91,13 +109,11 @@ export default function App() {
     })
 
     gainNode.connect(delayNode);
-    delayNode.connect(delayGain);
-    delayGain.connect(delayNode);
 
     if (activeNotes[key]) {
       activeNotes[key].oscBank.forEach((osc)=>{osc.stop()})
     }
-    activeNotes[key] = {oscBank: oscBank, gainNode: gainNode};
+    activeNotes[key] = {oscBank: oscBank, gainNode: gainNode, lowpassFreq: lowpassFreq, lowpassQ: lowpassQ };
   }
   const noteOff = (key) => {
     if (activeNotes[key]) {
@@ -110,6 +126,22 @@ export default function App() {
       activeNotes[key].gainNode.gain.setValueAtTime(activeNotes[key].gainNode.gain.value, now);
       activeNotes[key].gainNode.gain.linearRampToValueAtTime(0, relEndTime);
       activeNotes[key].oscBank.forEach((osc)=>{osc.stop(relEndTime)})
+
+      //cleanup
+      activeNotes[key].oscBank.forEach((osc)=>{
+        osc.onended = () => {
+          activeNotes[key].gainNode.disconnect();
+
+          activeNotes[key].lowpassFreq.removeEventListener('input', (e) => {
+            const maxFilterFreq = actx.sampleRate / 2;
+            filter.frequency.value = Number(e.target.value) * maxFilterFreq;
+          });
+          activeNotes[key].lowpassQ.removeEventListener('input', (e) => {
+            filter.Q.value = Number(e.target.value) * 30;
+          });
+
+        }
+      })
     }
   }
 
@@ -129,7 +161,7 @@ export default function App() {
           <div className='col-1-3'>
             <Detune setDetune={setDetune}/>
             <LowpassFilter actx={actx} lowpassFilter={lowpassFilter}/>
-            <Echo echo={echo} />
+            <Echo setEcho={setEcho} />
           </div>
         </PresetProvider>
     </div>

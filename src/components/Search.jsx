@@ -43,7 +43,7 @@ export default function Search ({searchOn, setCurrentSetting, setCurrentPreset, 
         </form>
 
         {searchResults ?
-          <div className='search-box'>
+          <div className='search-box' style={{paddingRight: '3%'}}>
             <table>
               <thead>
                 <tr>

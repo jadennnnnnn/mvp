@@ -3,6 +3,7 @@ const Presets = require('./db.js');
 module.exports = {
   searchPreset: (author, name, cb) => {
     Presets.find({author: {$regex: author, $options: 'i'}, name: {$regex: name, $options: 'i'}})
+      .sort({likes: -1})
       .then((result) => {cb(null, result)})
       .catch((err) => {cb(err)});
   },

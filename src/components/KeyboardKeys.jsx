@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 export default function KeyboardKeys ({noteOn, noteOff, NOTES}) {
 
-  const [octave, setOctave] = useState(5);
+  const [octave, setOctave] = useState(4);
 
   useEffect(() => {
     const onKeydown = (e) => {
